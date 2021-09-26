@@ -1,0 +1,24 @@
+version: '3.1'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node-server
+    restart: always
+    ports:
+      - "5000:2000"
+    depends_on:
+      - db
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: worker
+    ports:
+      - "3307:3306"
+    volumes:
+      - "./create_db.sql:/docker-entrypoint-initdb.d/1.sql"
